@@ -95,7 +95,7 @@
         let score = 0;
         let lastScore = 0;
         let frames = 0;
-        let gameSpeed = 6;
+        let gameSpeed = 8;
         let gameOver = false;
         let gameStarted = false;
         let gameOverReason = ""; 
@@ -185,7 +185,7 @@
                     }
                 } else {
                     ctx.fillRect(this.x, this.y + this.h, 12, 8);
-                    ctx.fillRect(this.x + this.w - 12, this.y + this.h, 12, 8);
+                    ctx.fillRect(this.x + this.w - 12, this.y + 12, 12, 8);
                 }
             },
             
@@ -436,8 +436,8 @@
                 score++;
                 scoreElement.innerText = Math.floor(score / 10);
                 
-                if (frames % 250 === 0) {
-                    gameSpeed += 0.4; 
+                if (frames % 200 === 0) {
+                    gameSpeed += 0.5; 
                 }
                 frames++;
             }
@@ -455,7 +455,7 @@
                 gameStarted = true; 
                 score = 0;
                 frames = 0;
-                gameSpeed = 6;
+                gameSpeed = 8;
                 phraseTimer = 0;
                 entities = [];
                 gameOverReason = "";

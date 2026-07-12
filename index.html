@@ -109,12 +109,12 @@
             x: 40,
             targetX: canvas.width / 3, 
             y: 200,
-            w: 30,
-            h: 20, 
-            legH: 8, 
+            w: 45,
+            h: 30, 
+            legH: 12, 
             dy: 0,
             gravity: 0.8,
-            jumpForce: -12.5,
+            jumpForce: -13.5,
             grounded: false,
             flameLevel: 0, 
             
@@ -132,7 +132,6 @@
                 if (this.flameLevel > 0) {
                     let flameColors = ['#FFCC00', '#FFA500', '#FF4500']; 
                     let flicker = flameColors[Math.floor(frames / 5) % flameColors.length];
-                    
                     ctx.shadowBlur = Math.min(150, 50 + (this.flameLevel * 15)); 
                     ctx.shadowColor = flicker;
                     ctx.fillStyle = flicker;
@@ -144,29 +143,29 @@
                 }
                 
                 ctx.fillRect(this.x, this.y, this.w, this.h);
-                ctx.fillRect(this.x, this.y - 8, 8, 8);
-                ctx.fillRect(this.x + this.w - 8, this.y - 8, 8, 8);
-                ctx.fillRect(this.x - 10, this.y + 5, 10, 5);
+                ctx.fillRect(this.x, this.y - 12, 12, 12);
+                ctx.fillRect(this.x + this.w - 12, this.y - 12, 12, 12);
+                ctx.fillRect(this.x - 15, this.y + 8, 15, 8);
 
                 ctx.shadowBlur = 0; 
 
                 if (gameOver) {
                     ctx.fillStyle = '#050505'; 
-                    ctx.fillRect(this.x + 18, this.y + 6, 4, 2); 
-                    ctx.fillRect(this.x + 26, this.y + 6, 4, 2); 
+                    ctx.fillRect(this.x + 24, this.y + 10, 6, 3); 
+                    ctx.fillRect(this.x + 36, this.y + 10, 6, 3); 
                     
                     ctx.fillStyle = '#00aaff'; 
-                    ctx.fillRect(this.x + 19, this.y + 8, 2, 6);
-                    ctx.fillRect(this.x + 27, this.y + 8, 2, 6);
+                    ctx.fillRect(this.x + 25, this.y + 13, 3, 9);
+                    ctx.fillRect(this.x + 37, this.y + 13, 3, 9);
                 } else {
                     ctx.fillStyle = '#050505'; 
-                    ctx.fillRect(this.x + 18, this.y + 4, 3, 3);
-                    ctx.fillRect(this.x + 26, this.y + 4, 3, 3);
+                    ctx.fillRect(this.x + 24, this.y + 6, 5, 5);
+                    ctx.fillRect(this.x + 36, this.y + 6, 5, 5);
 
                     if (displayScore >= 50) {
-                        ctx.fillRect(this.x + 19, this.y + 10, 2, 2); 
-                        ctx.fillRect(this.x + 21, this.y + 12, 4, 2); 
-                        ctx.fillRect(this.x + 25, this.y + 10, 2, 2); 
+                        ctx.fillRect(this.x + 26, this.y + 15, 3, 3); 
+                        ctx.fillRect(this.x + 29, this.y + 18, 6, 3); 
+                        ctx.fillRect(this.x + 35, this.y + 15, 3, 3); 
                     }
                 }
 
@@ -178,15 +177,15 @@
 
                 if (this.grounded) {
                     if (frames % 20 < 10 && gameStarted && !gameOver) {
-                        ctx.fillRect(this.x + 2, this.y + this.h, 6, this.legH);
-                        ctx.fillRect(this.x + this.w - 8, this.y + this.h, 6, this.legH);
+                        ctx.fillRect(this.x + 4, this.y + this.h, 8, this.legH);
+                        ctx.fillRect(this.x + this.w - 12, this.y + this.h, 8, this.legH);
                     } else {
-                        ctx.fillRect(this.x + 8, this.y + this.h, 6, this.legH);
-                        ctx.fillRect(this.x + this.w - 14, this.y + this.h, 6, this.legH);
+                        ctx.fillRect(this.x + 12, this.y + this.h, 8, this.legH);
+                        ctx.fillRect(this.x + this.w - 20, this.y + this.h, 8, this.legH);
                     }
                 } else {
-                    ctx.fillRect(this.x, this.y + this.h, 8, 5);
-                    ctx.fillRect(this.x + this.w - 8, this.y + this.h, 8, 5);
+                    ctx.fillRect(this.x, this.y + this.h, 12, 8);
+                    ctx.fillRect(this.x + this.w - 12, this.y + this.h, 12, 8);
                 }
             },
             
@@ -231,15 +230,15 @@
         class Obstacle {
             constructor(isFlying = false, isGreen = false) {
                 this.type = isGreen ? 'green' : 'red';
-                this.w = 15 + Math.random() * 15; 
+                this.w = 20 + Math.random() * 20; 
                 this.x = canvas.width;
                 this.isFlying = isFlying;
                 
                 if (isFlying) {
-                    this.h = 15;
-                    this.y = canvas.height - 20 - 75 - Math.random() * 10; 
+                    this.h = 20;
+                    this.y = canvas.height - 20 - 90 - Math.random() * 15; 
                 } else {
-                    this.h = 25 + Math.random() * 30; 
+                    this.h = 35 + Math.random() * 40; 
                     this.y = canvas.height - 20 - this.h;
                 }
             }
@@ -266,10 +265,10 @@
         class Food {
             constructor() {
                 this.type = 'food';
-                this.w = 12;
-                this.h = 12;
+                this.w = 18;
+                this.h = 18;
                 this.x = canvas.width;
-                this.y = canvas.height - 20 - 20 - Math.random() * 60; 
+                this.y = canvas.height - 20 - 30 - Math.random() * 80; 
             }
             draw() {
                 ctx.fillStyle = '#FFD700'; 
@@ -296,15 +295,20 @@
             let displayScore = Math.floor(score / 10);
             
             if (gameStarted) {
-                let spawnInterval = Math.max(40, 90 - Math.floor(displayScore / 30) * 5);
+                let spawnInterval = Math.max(45, 90 - Math.floor(displayScore / 30) * 5);
                 
                 if (frames % spawnInterval === 0) {
-                    if (displayScore >= 200 && Math.random() > 0.85) {
-                        entities.push(new Food());
-                    } else {
-                        let isFlying = displayScore >= 100 && Math.random() > 0.6;
-                        let isGreen = displayScore >= 150 && Math.random() > 0.7; 
-                        entities.push(new Obstacle(isFlying, isGreen));
+                    let lastEnt = entities[entities.length - 1];
+                    let safeToSpawn = !lastEnt || (canvas.width - lastEnt.x > 350);
+                    
+                    if (safeToSpawn) {
+                        if (displayScore >= 200 && Math.random() > 0.85) {
+                            entities.push(new Food());
+                        } else {
+                            let isFlying = displayScore >= 100 && Math.random() > 0.6;
+                            let isGreen = displayScore >= 150 && Math.random() > 0.7; 
+                            entities.push(new Obstacle(isFlying, isGreen));
+                        }
                     }
                 }
             }
@@ -478,4 +482,3 @@
     </script>
 </body>
 </html>
-

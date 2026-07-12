@@ -49,6 +49,15 @@
             z-index: 10;
         }
 
+        #livesBoard {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            font-size: 24px;
+            filter: drop-shadow(0 0 8px #ff0055);
+            z-index: 10;
+        }
+
         #instructions {
             position: absolute;
             top: 100px;
@@ -79,6 +88,7 @@
 
     <div id="scoreBoard">Score: <span id="scoreVal">0</span></div>
     <div id="lastScoreBoard">Last Score: <span id="lastScoreVal">0</span></div>
+    <div id="livesBoard">❤️❤️❤️</div>
     <div id="instructions">Press Space or Tap to start</div>
     <div id="copyright">© Eva</div>
     
@@ -90,12 +100,15 @@
         const scoreElement = document.getElementById('scoreVal');
         const lastScoreElement = document.getElementById('lastScoreVal');
         const lastScoreBoard = document.getElementById('lastScoreBoard');
+        const livesElement = document.getElementById('livesBoard');
         const instructionsElement = document.getElementById('instructions');
 
         let score = 0;
         let lastScore = 0;
         let frames = 0;
-        let gameSpeed = 11;
+        let gameSpeed = 9;
+        let lives = 3;
+        let invincibilityFrames = 0;
         let gameOver = false;
         let gameStarted = false;
         let gameOverReason = ""; 
@@ -104,6 +117,14 @@
         const phrases = ["Purr-fect!", "Keep Glowing!", "Meow-gical!", "You're a Star!", "Neon Power!", "On Fire!"];
         let currentPhrase = "";
         let phraseTimer = 0;
+
+        function updateLivesUI() {
+            let heartStr = "";
+            for (let i = 0; i < lives; i++) {
+                heartStr += "❤️";
+            }
+            livesElement.innerText = heartStr;
+        }
 
         const cat = {
             x: 40,
@@ -126,6 +147,10 @@
             },
             
             draw: function() {
+                if (invincibilityFrames > 0 && Math.floor(frames / 4) % 2 === 0) {
+                    return;
+                }
+
                 let displayScore = Math.floor(score / 10);
                 let alpha = Math.min(1, 0.15 + (displayScore / 80)); 
                 
@@ -204,6 +229,11 @@
                     this.grounded = true;
                     this.y = canvas.height - 20 - totalHeight;
                 }
+
+                if (invincibilityFrames > 0) {
+                    invincibilityFrames--;
+                }
+
                 this.draw();
             }
         };
@@ -295,11 +325,11 @@
             let displayScore = Math.floor(score / 10);
             
             if (gameStarted) {
-                let spawnInterval = Math.max(35, 75 - Math.floor(displayScore / 25) * 5);
+                let spawnInterval = Math.max(45, 85 - Math.floor(displayScore / 25) * 5);
                 
                 if (frames % spawnInterval === 0) {
                     let lastEnt = entities[entities.length - 1];
-                    let safeToSpawn = !lastEnt || (canvas.width - lastEnt.x > 330);
+                    let safeToSpawn = !lastEnt || (canvas.width - lastEnt.x > 350);
                     
                     if (safeToSpawn) {
                         if (displayScore >= 200 && Math.random() > 0.85) {
@@ -343,13 +373,34 @@
                         i--;
                         continue;
                     } else if (ent.x + ent.w < 0) {
-                        gameOver = true;
-                        gameOverReason = "You missed the Green target!";
+                        entities.splice(i, 1);
+                        i--;
+                        if (invincibilityFrames === 0) {
+                            lives--;
+                            updateLivesUI();
+                            if (lives <= 0) {
+                                gameOver = true;
+                                gameOverReason = "You missed the Green target!";
+                                break;
+                            }
+                        }
+                        continue;
                     }
                 } else if (ent.type === 'red') {
                     if (isHit) {
-                        gameOver = true;
-                        gameOverReason = "";
+                        if (invincibilityFrames === 0) {
+                            lives--;
+                            updateLivesUI();
+                            if (lives <= 0) {
+                                gameOver = true;
+                                gameOverReason = "";
+                            } else {
+                                invincibilityFrames = 60;
+                                entities.splice(i, 1);
+                                i--;
+                                continue;
+                            }
+                        }
                     }
                 }
                 
@@ -436,8 +487,8 @@
                 score++;
                 scoreElement.innerText = Math.floor(score / 10);
                 
-                if (frames % 150 === 0) {
-                    gameSpeed += 0.5; 
+                if (frames % 200 === 0) {
+                    gameSpeed += 0.4; 
                 }
                 frames++;
             }
@@ -455,7 +506,9 @@
                 gameStarted = true; 
                 score = 0;
                 frames = 0;
-                gameSpeed = 11;
+                gameSpeed = 9;
+                lives = 3;
+                invincibilityFrames = 0;
                 phraseTimer = 0;
                 entities = [];
                 gameOverReason = "";
@@ -464,6 +517,7 @@
                 cat.dy = 0;
                 cat.flameLevel = 0; 
                 scoreElement.innerText = "0";
+                updateLivesUI();
                 animate();
                 cat.jump();
             } else {
@@ -482,4 +536,3 @@
     </script>
 </body>
 </html>
-

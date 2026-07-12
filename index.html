@@ -95,7 +95,7 @@
         let score = 0;
         let lastScore = 0;
         let frames = 0;
-        let gameSpeed = 8;
+        let gameSpeed = 11;
         let gameOver = false;
         let gameStarted = false;
         let gameOverReason = ""; 
@@ -295,18 +295,18 @@
             let displayScore = Math.floor(score / 10);
             
             if (gameStarted) {
-                let spawnInterval = Math.max(45, 90 - Math.floor(displayScore / 30) * 5);
+                let spawnInterval = Math.max(35, 75 - Math.floor(displayScore / 25) * 5);
                 
                 if (frames % spawnInterval === 0) {
                     let lastEnt = entities[entities.length - 1];
-                    let safeToSpawn = !lastEnt || (canvas.width - lastEnt.x > 350);
+                    let safeToSpawn = !lastEnt || (canvas.width - lastEnt.x > 330);
                     
                     if (safeToSpawn) {
                         if (displayScore >= 200 && Math.random() > 0.85) {
                             entities.push(new Food());
                         } else {
-                            let isFlying = displayScore >= 100 && Math.random() > 0.6;
-                            let isGreen = displayScore >= 150 && Math.random() > 0.7; 
+                            let isFlying = displayScore >= 75 && Math.random() > 0.6;
+                            let isGreen = displayScore >= 75 && Math.random() > 0.7; 
                             entities.push(new Obstacle(isFlying, isGreen));
                         }
                     }
@@ -436,7 +436,7 @@
                 score++;
                 scoreElement.innerText = Math.floor(score / 10);
                 
-                if (frames % 200 === 0) {
+                if (frames % 150 === 0) {
                     gameSpeed += 0.5; 
                 }
                 frames++;
@@ -455,7 +455,7 @@
                 gameStarted = true; 
                 score = 0;
                 frames = 0;
-                gameSpeed = 8;
+                gameSpeed = 11;
                 phraseTimer = 0;
                 entities = [];
                 gameOverReason = "";
@@ -482,3 +482,4 @@
     </script>
 </body>
 </html>
+

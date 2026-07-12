@@ -19,15 +19,14 @@
             user-select: none;
         }
         
-        /* Responsive screen setup */
         canvas {
             background-color: #000;
             border: 2px solid #111;
             box-shadow: 0 0 30px rgba(64, 224, 208, 0.15);
             image-rendering: pixelated; 
-            max-width: 95%; /* Prevent taking full width on mobile */
+            max-width: 95%; 
             height: auto;
-            aspect-ratio: 800 / 300; /* Maintain game aspect ratio */
+            aspect-ratio: 800 / 300; 
         }
 
         #scoreBoard {
@@ -99,7 +98,7 @@
         let gameSpeed = 6;
         let gameOver = false;
         let gameStarted = false;
-        let gameOverReason = ""; // Store game over reason
+        let gameOverReason = ""; 
         let entities = []; 
 
         const phrases = ["Purr-fect!", "Keep Glowing!", "Meow-gical!", "You're a Star!", "Neon Power!", "On Fire!"];
@@ -246,7 +245,7 @@
             }
             draw() {
                 if (this.type === 'green') {
-                    ctx.fillStyle = '#00ff00'; // Green neon
+                    ctx.fillStyle = '#00ff00'; 
                 } else {
                     ctx.fillStyle = this.isFlying ? '#ff00ff' : '#ff0055'; 
                 }
@@ -297,17 +296,13 @@
             let displayScore = Math.floor(score / 10);
             
             if (gameStarted) {
-                let spawnInterval = 90; 
-                if (displayScore >= 200) {
-                    spawnInterval = Math.max(45, 90 - Math.floor((displayScore - 200) / 50) * 10);
-                }
+                let spawnInterval = Math.max(40, 90 - Math.floor(displayScore / 30) * 5);
                 
                 if (frames % spawnInterval === 0) {
                     if (displayScore >= 200 && Math.random() > 0.85) {
                         entities.push(new Food());
                     } else {
                         let isFlying = displayScore >= 100 && Math.random() > 0.6;
-                        // Green obstacles start appearing after score 150
                         let isGreen = displayScore >= 150 && Math.random() > 0.7; 
                         entities.push(new Obstacle(isFlying, isGreen));
                     }
@@ -344,7 +339,6 @@
                         i--;
                         continue;
                     } else if (ent.x + ent.w < 0) {
-                        // If the green obstacle goes off-screen without being hit
                         gameOver = true;
                         gameOverReason = "You missed the Green target!";
                     }
@@ -438,8 +432,8 @@
                 score++;
                 scoreElement.innerText = Math.floor(score / 10);
                 
-                if (Math.floor(score / 10) >= 200 && frames % 300 === 0) {
-                    gameSpeed += 0.5; 
+                if (frames % 250 === 0) {
+                    gameSpeed += 0.4; 
                 }
                 frames++;
             }
@@ -484,3 +478,4 @@
     </script>
 </body>
 </html>
+
